@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+//import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lkbills/Helpers/elbaapi.dart';
 import 'package:lkbills/globals.dart';
 
@@ -12,7 +12,7 @@ class Lkbillsmain extends StatefulWidget {
 
 class _LkbillsmainState extends State<Lkbillsmain> {
 
-  String outText = dotenv.env['elba'] ?? '';
+  String outText = '';// = dotenv.env['elba'] ?? '';
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +24,17 @@ class _LkbillsmainState extends State<Lkbillsmain> {
             ElevatedButton(onPressed: () async {
               var answer = await getElbaOrgs();
               setState(() {
-                outText = answer.toString();
+                outText += '\n$answer';
               });
+              //get our organization ID
               if (answer is Map && answer.containsKey('organizations')) {
                 myOrgId = (answer['organizations'] as List).first['id'];
                 setState(() {
-                  outText = myOrgId;
+                  outText += '\n$myOrgId';
                 });
-                answer = await getElbaContractors();
+                var answer2 = await getElbaContractors();
                 setState(() {
-                  outText = answer.toString();
+                  outText += '\n${answer2.toString()}';
                 });
               }
             }, child: Text('get orgs'))

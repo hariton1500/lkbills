@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:lkbills/globals.dart';
 getElbaOrgs() async {
   try {
-    var response = await http.get(Uri.parse('https://elba-api.kontur.ru/v1/organizations?'), headers: {'X-Kontur-ApiKey': dotenv.env['elba'] ?? ''});
+    var response = await http.get(Uri.parse('http://localhost:8080/v1/organizations?'), headers: {'X-Kontur-ApiKey': dotenv.env['elba'] ?? ''});
     if (response.statusCode == 200) {
       var body = response.body;
       var decoded = jsonDecode(body);
@@ -22,13 +22,14 @@ getElbaOrgs() async {
 
 getElbaContractors() async {
   try {
-    var response = await http.post(Uri.parse('https://elba-api.kontur.ru/v1/organizations/$myOrgId/contarctors/search'), headers: {'X-Kontur-ApiKey': dotenv.env['elba'] ?? ''});
+    var decoded; String body = '';
+    var response = await http.post(Uri.parse('http://localhost:8080/v1/organizations/$myOrgId/contractors/search?'), body: {'filter': {'name': ''}}, headers: {'X-Kontur-ApiKey': dotenv.env['elba'] ?? ''});
     if (response.statusCode == 200) {
-      var body = response.body;
-      var decoded = jsonDecode(body);
+      body = response.body;
+      decoded = jsonDecode(body);
       return decoded;
     } else {
-      return null;
+      return body;
     }
   } catch (e) {
     print(e);
