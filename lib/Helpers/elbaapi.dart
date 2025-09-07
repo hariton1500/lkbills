@@ -22,10 +22,11 @@ getElbaOrgs() async {
 
 getElbaContractors() async {
   try {
-    var decoded; String body = '';
+    var decoded, body;
     var response = await http.post(Uri.parse('http://localhost:8080/v1/organizations/$myOrgId/contractors/search?'), body: {'filter': {'name': ''}}, headers: {'X-Kontur-ApiKey': dotenv.env['elba'] ?? ''});
     if (response.statusCode == 200) {
       body = response.body;
+      print(body);
       decoded = jsonDecode(body);
       return decoded;
     } else {
